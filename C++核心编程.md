@@ -1,3 +1,17 @@
+### vs code快捷键
+
+Ctrl + B     隐藏侧边栏
+
+Ctrl + ~     隐藏下面边栏
+
+Ctrl + [     整行左移
+
+Ctrl + ]     整行右移
+
+F11          全屏         
+
+
+
 ### 内存分区
 
 #### 代码区
@@ -177,6 +191,180 @@ person p1 = p2 ;
 1.如写了有参构造函数，则编译器不在写默认构造函数，但会给我们写一个拷贝构造函数（浅拷贝）
 
 2.若我们写了拷贝构造函数，则编译器不再给我们提供任何其它函数
+
+
+
+#### 类对象作为类成员
+
+有类对象作为类成员的构造函数与都是普通成员的构造函数稍有不同
+
+```c++
+class perosn()
+{
+    public:
+    	string person_name ;
+    person(string name ) //person的有参构造函数
+    {
+        person_name = name ;
+    }
+}
+
+class subject 
+{
+    public :
+    	string my_subject ;
+    	person p ;
+    subject(string name , string personname): p(personname)//subject的构造函数
+    {
+        my_subject = name ;
+    }
+}
+
+int main()
+{
+    subject("Alace","English") ;
+}
+```
+
+
+
+
+
+#### 静态成员变量
+
+静态成员变量的特点：
+
+- 在编译阶段分配内存
+- 类内声明，类外初始化
+- 所有对象共享同一份数据
+
+静态成员的两种访问方式：
+
+```c++
+class person
+{
+    public:
+    	ststic int m_A ;
+    
+};
+
+int m_A = 100 ;
+
+int main()
+{
+    person p ;
+    cout << p1.m_A << endl ; //通过成员访问
+    cout << preson :: m_A << endl ; // 通过类名访问
+    
+}
+    
+```
+
+
+
+#### 静态成员函数
+
+- 所有对象共享同一个函数
+- 静态成员函数**只能访问**静态成员变量
+
+
+
+#### 常函数与常对象
+
+```c++
+//常函数不允许修改成员的值
+//成员后面加上 mutable 在常函数中依然可以修改
+class person
+{
+    public :
+    	int m_A ;
+    	mutable int m_B ;
+    void show() const // 常函数定义
+    {
+        m_A = 100 ; //不允许
+        m_B = 200 ; //允许
+    }
+};
+
+// 常对象
+// 常对象只能调用常函数
+class person
+{
+    public :
+    	int m_A = 100 ;
+    	mutable int m_B = 200 ;
+    void show() const
+    {
+        cout << "Hello World " << endl ;
+    }
+};
+int main()
+{
+    const person p ;
+    p.m_A = 10 ; //不允许
+    p.m_B = 10 ; // 允许
+    p.show(); //允许
+}
+```
+
+
+
+
+
+
+
+
+
+### 友元
+
+
+
+#### 全局函数做友元
+
+```c++
+class person
+{
+    friend void show ; // 全局函数做友元
+	private :
+    	int m_A = 10;
+};
+
+void show()
+{
+    person p ;
+    cout << p.m_A << endl ;
+}
+```
+
+
+
+#### 类做友元
+
+#### 成员函数做友元
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -440,3 +628,146 @@ void swap(int &a ,int &b) //交换 a , b 的值
 1.不要返回局部变量的引用
 
 2.函数可以作为可修改的左值
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 继承
+
+#### 继承方式
+
+```c++
+class pereson           //父类
+{
+    public :
+    	int m_A ;
+    protected :
+    	int m_B ;
+    private :
+    	int m_C ;
+};
+```
+
+
+
+公有继承：
+
+```c++
+class person1 : public person
+{
+    
+    public :
+    	int m_A ;
+    protected :
+    	int m_B ;
+    private :
+    	int m_C ; //不可访问
+};
+```
+
+
+
+保护继承：
+
+```c++
+class person2 : protected person 
+{
+    protected :
+    	int m_A ;
+    	int m_B ;
+    private :
+    	int m_C ;  //不可访问
+}
+```
+
+
+
+私有继承：
+
+```c++
+class person3 :private person 
+{
+    private :
+    	int m_A ;
+    	int m_B ;
+    private :
+    	int m_C ; //不可访问
+}
+```
+
+
+
+
+
+#### 继承中同名成员的处理
+
+访问子类同名成员，直接访问
+
+访问父类成员，加上父类作用域
+
+
+
+####  多继承
+
+```c++
+class son : public father1 ,public father2
+{
+    .........
+};
+```
+
+ 
+
+
+
+#### 菱形继承
+
+```c++
+class father
+{
+    public :
+        int m_A ;
+};
+
+class son1 : virtual public father   //虚继承
+{
+
+};
+
+class son2 : virtual public father  //虚继承
+{
+
+};
+
+class grandson : public son1 ,public son2
+{
+    
+};
+
+int main()
+{
+    grandson g1 ;
+    g1.son1::m_A = 100 ;
+    g1.son2::m_A = 200 ;
+    cout << g1.son1::m_A << endl ;
+    cout << g1.son2::m_A << endl ;
+    cout << g1.m_A << endl ;      // 可以直接访问，并且只有一份数据
+ 
+    system ("pause");
+    return 0;
+}
+
+// cl /d1 reportSingleClassLayoutgrandson '文件所在地' 报告单个类布局
+```
+
