@@ -12,6 +12,20 @@ F11          全屏
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### 内存分区
 
 #### 代码区
@@ -46,6 +60,22 @@ F11          全屏
 
 
 #### 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### 函数
 
@@ -121,6 +151,18 @@ int main()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ### 封装
 
 #### 封装权限
@@ -130,6 +172,14 @@ public:成员 类内部可以访问，类的外部也可以访问
 protected:成员 类的内部可以访问，类的外部不可以访问
 
 private:成员 类的内部可以访问，类的外部不可以访问
+
+
+
+
+
+
+
+
 
 
 
@@ -306,6 +356,10 @@ int main()
     p.show(); //允许
 }
 ```
+
+
+
+
 
 
 
@@ -591,6 +645,14 @@ int main()
 
 
 
+
+
+
+
+
+
+
+
 ### 引用
 
 引用就是给变量起一个别名，能够使两个变量名操作同一块地址
@@ -769,5 +831,210 @@ int main()
 }
 
 // cl /d1 reportSingleClassLayoutgrandson '文件所在地' 报告单个类布局
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 多态
+
+#### 多态的基本概念
+
+- 静态多态：函数重载 和 运算符重载 属于静态多态
+- 动态多态：派生类 和 虚函数 实现运行时多态
+
+静态和动态多态的区别：
+
+- 静态多态的地址在编译阶段就已经绑定
+- 动态多态的地址在运行时才分配内存
+
+```c++
+class father
+{
+    public:
+        void speak()
+        {
+            cout <<"Father is speaking" << endl ;
+        }
+};
+
+class son : public father
+{
+    public :
+        void speak()                             // 静态，在编译阶段就已经确定函数地址
+        {
+            cout << "Son is speaking" << endl ;
+        }
+        virtual void speak()                             // 动态，在运行阶段才确定函数地址
+        {
+            cout << "Son is speaking" << endl ;
+        }
+};
+
+void show(father & f)                           // 要有继承关系，子类重写父类的虚函数，父类指针或者引用指向子类
+{
+    f.speak();
+}
+
+int main()
+{
+    son s ;
+    show(s);
+    
+    system("pause");
+    return 0 ;
+}
+```
+
+
+
+#### 多态的小列子
+
+```c++
+#include<iostream>
+using namespace std ;
+
+class F_calculator  // 父类
+{
+    public :
+        
+        virtual int getresult()
+        {
+            return 0 ;
+        }
+        int m_A ;
+        int m_B ;
+
+};
+
+class Addcalcultor : public F_calculator  // 加法类
+{
+    public :
+         int getresult()
+        {
+            return m_A + m_B ;
+        }
+};
+
+class Subcalcultor : public F_calculator //  减法类
+{
+    public :
+        int getresult()
+        {
+            return m_A - m_B ;
+        }
+};
+
+void Add()
+{
+    F_calculator * add = new Addcalcultor ;   // 父类指针指向子类对象
+    add ->m_A = 1 ;
+    add ->m_B = 1 ;
+    cout << add->m_A <<"+" << add->m_B << "="<<add->getresult()<< endl ;
+    delete add ;
+}
+
+void Sub()
+{
+    F_calculator * sub =new Subcalcultor ;  // 父类指针指向子类对象
+    sub->m_A =2 ;
+    sub->m_B =3 ;
+    cout << sub->m_A << "-" << sub->m_B << "=" << sub->getresult()<< endl ;
+    delete sub ;
+
+}
+int main()
+{
+    Add();
+    Sub();
+    system ("pause");
+    return 0 ;
+}
+```
+
+
+
+#### 纯虚函数与抽象类
+
+在多态中，通常父类中的虚函数的实现是毫无意义的，主要都是调用子类重写的内容
+
+因此可以将虚函数改为纯虚函数
+
+当类中有了纯虚函数，这给类也称为抽象类
+
+抽象类的特点：
+
+无法实例化对象
+
+子类必须重写父类中的纯虚函数，否则也属于抽象类
+
+```c++
+#include<iostream>
+using namespace std ;
+
+class Father
+{
+    public :
+        
+        virtual int getresult() = 0 ;  //纯虚函数
+        int m_A ;
+        int m_B ;
+
+};
+
+class Addson : public Father
+{
+    public :
+        int getresult()               //子类重写父类虚函数
+        {
+            return m_A + m_B ;
+        }
+};
+
+class Subson : public Father 
+{
+    public :
+        int getresult()               //子类重写父类虚函数
+        {
+            return m_A - m_B ;
+        }
+};
+
+void Add()
+{
+    Father * add = new Addson ;   // 父类指针指向子类对象
+    add ->m_A = 1 ;
+    add ->m_B = 1 ;
+    cout << add->m_A <<"+" << add->m_B << "="<<add->getresult()<< endl ;
+    delete add ;
+}
+
+void Sub()
+{
+    Father * sub =new Subson ; // 父类指针指向子类对象
+    sub->m_A =2 ;
+    sub->m_B =3 ;
+    cout << sub->m_A << "-" << sub->m_B << "=" << sub->getresult()<< endl ;
+    delete sub ;
+
+}
+int main()
+{
+    Add();
+    Sub();
+    system ("pause");
+    return 0 ;
+}
 ```
 
