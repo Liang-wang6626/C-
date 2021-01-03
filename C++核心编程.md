@@ -1038,3 +1038,261 @@ int main()
 }
 ```
 
+
+
+
+
+
+
+#### 虚析构与纯虚析构
+
+如果子类中有属性开辟到堆区中，那么在多态发生时，父类指针在释放时无法调用到子类的析构代码
+
+解决方法：
+
+将父类的析构函数改为虚析构或者纯虚析构
+
+
+
+```c++
+#include<iostream>
+#include<string>
+using namespace std ;
+
+class Father
+{
+    public :
+        Father()
+        {
+            cout << "Father" << endl ;
+            
+        }
+        virtual ~Father()                   //虚析构
+        {
+            cout << "~Father" << endl ;
+        }
+
+        virtual void speak()
+        {
+            cout << "Father is speaking" << endl ;
+        }
+
+};
+
+class Son : public Father
+{
+    public :
+        string *m_name ;                //子类属性开辟到堆区
+
+        Son(string name)
+        {
+            m_name = new string (name) ;
+            cout << "Son" << endl ;
+        }
+
+        ~Son()
+        {
+            if (m_name != NULL)
+            {
+                delete m_name ;
+                m_name = NULL ;
+                cout << "~Son" << endl ;
+            }
+        }
+
+        virtual void speak()
+        {
+            cout << "Son is speaking" << endl ;
+        }
+
+};
+
+void dowork()
+{
+    Father * f = new Son("Tom") ;
+    f->speak();
+    delete f ;
+}
+
+int main()
+{
+    dowork();
+
+    system("pause");
+    return 0 ;
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 文件
+
+#### 写文件
+
+1.头文件包含头文件 #include<fstream>
+
+2.创建对象
+
+- 写文件  ostream
+- 读文件  istream
+- 读写文件  fstream
+
+3.路径及其打开方式
+
+|   ios::in   | 为读文件而打开           |
+| :---------: | ------------------------ |
+|  ios::out   | 为写文件而打开           |
+|  ios::ate   | 初始位置文件尾           |
+|  ios::app   | 追加方式写文件           |
+| ios::trunc  | 如果文件存在先删除在创建 |
+| ios::binary | 二进制方式               |
+
+4.操作完毕，关闭文件
+
+```c++
+#include<iostream>
+using namespace std ;
+#include<fstream>
+
+int main()
+{
+    ofstream ofs ;
+    ofs.open("test.txt",ios::out);
+    ofs << "Hello,World " << endl ;
+    ofs.close() ;
+    system("pause");
+    return 0 ;
+}
+
+```
+
+
+
+
+
+#### 读文件
+
+1.包含头文件 #include<fstream>
+
+2.创建对象   ifstream ifs ;
+
+3.路径及其打开方式
+
+4.读文件
+
+```c++
+//第一种方法
+char buffer [n] = {0} ; //初始化数组
+while (ifs >> buffer)
+{
+    cout << buffer ;
+}
+
+//第二种方法
+char buffer [n] = {0};
+while (ifs.getline(buffer,sizeof(buffer)))
+{
+    cout << buffer ;
+}
+
+//第三种方法
+string buffer ;
+while(getline(ifs,buffer))
+{
+    cout << buffer ;
+}
+
+```
+
+5.操作完毕，关闭文件
+
+
+
+
+
+```c++
+//合起来
+
+#include<iostream>
+#include<string>
+using namespace std ;
+#include<fstream>
+
+void Write()
+{
+    ofstream ofs ;
+    ofs.open("test.txt",ios :: trunc);
+    ofs << "This is World !" << endl ;
+    ofs << "Hello World ! " << endl ; 
+    ofs.close() ;
+}
+
+void read()
+{
+    ifstream ifs ;
+    ifs.open ("test.txt",ios :: in) ;
+    if ( ! ifs.is_open())
+    {
+        cout << "File open failed" << endl ;
+    }
+
+    string buffer ;
+    while(getline(ifs,buffer))
+    {
+        cout << buffer << endl ;
+    }
+    ifs.close () ;
+}
+
+int main()
+{
+    Write();
+    read();
+    system("pause");
+    return 0 ;
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
