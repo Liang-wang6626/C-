@@ -408,3 +408,277 @@ int main()
 
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### STL
+
+#### STL的基本概念
+
+STL(Standard Template Library,标准模板库)
+
+
+
+#### STL的六大组件
+
+- 容器，算法，迭代器，仿函数，适配器（配接器），空间配置器
+- 容器：各种数据结构如vector,list,deque,set,map,用来存放数据
+- 算法：各种常用的算法，如sort,find,copy,for_each等
+- 迭代器：扮演了容器与算法之间的粘合剂
+- 仿函数：行为类似函数，可作为算法的某种策略
+- 适配器：一种用来修饰容器或者仿函数或迭代器接口的东西
+- 空间适配器：负责空间适配与管理
+
+
+
+
+
+#### 迭代器
+
+|      种类      |         功能         |                                    |
+| :------------: | :------------------: | :--------------------------------: |
+|   输入迭代器   |         只读         |       只读，支持++，==，！=        |
+|   输出迭代器   |         只写         |            只写，支持++            |
+|   前向迭代器   | 读写，向前推进迭代器 |       读写，支持++，==，！=        |
+|   双向迭代器   | 读写，向前和向后操作 |          读写，支持++，--          |
+| 随机访问迭代器 |  读写，跳跃访问数据  | 读写，支持++，--，[n],-n,<,<=,>,>= |
+
+
+
+
+
+#### vector存放内置数据类型
+
+```c++
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std ;
+
+//第一种方法
+void test_01() 
+{
+    vector<int> v ;
+    v.push_back(10);   //插入数据
+    v.push_back(20);
+    v.push_back(30);
+    vector<int>::iterator itBegin = v.begin();  //起始迭代器，指向第一个元素
+    vector<int>::iterator itEnd = v.end() ;     //结束迭代器，指向最后一个元素的下一个元素
+    while(itBegin != itEnd)
+    {
+        cout << *itBegin << endl ;
+        itBegin++ ;
+    }
+}
+
+//第二种方法
+void test_02()
+{
+    vector<int> v ;
+    v.push_back(10);
+    v.push_back(20);
+    v.push_back(30);
+    for(vector<int>::iterator itBegin=v.begin();itBegin < v.end();itBegin++)
+    {
+        cout << *itBegin << endl ;
+    }
+}
+
+void my_prient(int val)
+{
+    cout << val << endl ;
+}
+//第三种方法
+void test_03()
+{
+    vector<int> v ;
+    v.push_back(10);   //插入数据
+    v.push_back(20);
+    v.push_back(30);
+    for_each(v.begin(),v.end(),my_prient); //利用系统提供的遍历函数，包含头文件#include<algorthm>
+   
+}
+
+int main()
+{
+    //test_01();
+    //test_02();
+    test_03();
+    system("pause");
+    return 0 ;
+}
+```
+
+
+
+
+
+
+
+#### vector存放自定义数据类型
+
+```c++
+#include<iostream>
+#include<string>
+#include<vector>
+using namespace std ;
+
+class person
+{
+    public:
+        string m_name;
+        int m_age ;
+    public:
+        person(string name,int age)
+        {
+            this->m_age = age ;
+            this->m_name = name ;
+        }
+};
+
+void test_01()
+{
+    vector<person>v;
+    person p1("Aliace",10);
+    person p2("Bob",20);
+    person p3("Crist",30);
+    v.push_back(p1);
+    v.push_back(p2);
+    v.push_back(p3);
+    for(vector<person>::iterator itBegin =v.begin();itBegin != v.end();itBegin++)
+    {
+        cout<< itBegin->m_name << endl ;
+        cout<< itBegin->m_age << endl ;
+
+    }
+}
+
+int main()
+{
+    test_01();
+    system("pause");
+    return 0 ;
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### string容器
+
+#### string构造函数
+
+```c++
+// string()  默认构造函数
+// string(const char * s) 使用字符串初始化
+// string(const string &str) 将一个字符串对像赋给另一个字符串对象
+// string(int n,char c) 使用n给字符c初始化
+
+#include<iostream>
+#include<string>
+using namespace std ;
+
+void test()
+{
+    string s1("Hello World!");
+    cout << "s1 = : "<< s1 << endl ;
+    const char*ptr = "Hello,world";
+    string s2(ptr);
+    cout << "s2 = : "<< s2 << endl ;
+    string s3 (s2);
+    cout << "s3 = : "<< s3 << endl ;
+    string s4(5,'a');
+    cout << "s4 = : "<< s4 << endl ;
+}
+
+int main()
+{
+    test();
+    system("pause");
+    return 0 ;
+}
+```
+
+
+
+
+
+
+
+#### string的赋值操作
+
+```c++
+//string的赋值操作
+
+#include<iostream>
+#include<string>
+using namespace std ;
+
+void test()
+{
+    string str1;
+    str1 = "Hello World!";
+    cout << "str1 = "<< str1 << endl ;
+
+    string str2 = str1 ;
+    cout << "str2 = " << str2 << endl ;
+
+    string str3 ;
+    str3.assign("Hello World!");
+    cout << "str3 = " << str3 << endl ;
+
+    string str4 ;
+    str4.assign("Hello world!",5);
+    cout << "str4 = " << str4 << endl ;
+
+    string str5;
+    str5.assign(str4);
+    cout <<"str5 = " << str5 << endl ;
+
+    string str6 ;
+    str6.assign(5,'a');
+    cout <<"str6 = " << str6 << endl ;
+    
+
+}
+
+int main()
+{
+    test();
+    system("pause");
+    return 0 ;
+}
+```
+
