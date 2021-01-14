@@ -682,3 +682,78 @@ int main()
 }
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
+#### string的字符串拼接
+
+```c++
+void test()
+{
+    string str1 ("Hello");
+    string str2 = "World!" ;
+    str1 = str1 + str2 ;
+    cout << "str1 = " << str1 << endl ;
+    cout << "str2 = " << str2 << endl ;
+
+    string str3 = "I love C++" ;                  //string& apend(const char* s)
+    str3.append("Hello");
+    cout << "str3 : " << str3 << endl ;
+
+    str3.append(str2);
+    cout << "str3 : " << str3 << endl ;          //string& append(const string& str)
+
+    string str4 = "I love" ;
+    str4.append("Hello",3);
+    cout << "str4 : " << str4 << endl ;         //string& append(const char* s,int n)将字符串s的前n个字符拼接
+
+    string str5 = "Hello" ;
+    str5.append(str3,7,3);
+    cout << "str5 : " << str5 << endl ;        //string& append(const char*s ,int n1,int n2)
+                                               //从字符串的n1位置开始n2个字符进行拼接
+}
+```
+
+
+
+
+
+
+
+
+
+#### string 字符串的查找与替换
+
+```c++
+int find(const string& str,int pos)//查找str第一次出现的位置，从pos开始,pos默认为0
+int find(const char* s,int pos )//查找s第一次出现的位置，从pos开始，pos默认为0
+int find(const string& str ,int pos,int n)//查找前n个字符
+int rfind(const string& str,int pos)//与find不同的是，rfind从右往左开始查找
+string& replace(int pos,int n,string& str)//从pos开始，替换n个str字符
+    
+void test()
+{
+    string str1 = "Hello world!" ;
+    int pos = str1.find('o');
+    cout << pos << endl ;
+
+    pos = str1.rfind('o');
+    cout << pos << endl ;
+
+    pos = str1.find("o",1,2);
+    cout << pos << endl ;
+
+    str1.replace(1,2,"8");
+    cout << str1 << endl ;
+}
+```
+
