@@ -757,3 +757,357 @@ void test()
 }
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
+#### string字符串的比较
+
+*等于返回0，大于返回1，小于返回-1*
+
+```c++
+int compare (const string& str)
+int compare (const char* s)
+    
+void test()
+{
+    string str1 = "Hello" ;
+    string str2 = "Hello" ;
+    if(str1.compare(str2) == 0)                //等于返回0，大于返回1，小于返回-1
+    {
+        cout << "str1 = str 2" << endl ;
+    }
+    else if(str1.compare(str2) > 0 )
+    {
+        cout << "str1 > str2" << endl ;
+    }
+    else
+    {
+        cout <<"str1 < str2 " << endl ;
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### string单个字符的存取
+
+- 通过[]方式访问
+- 通过at方式访问
+
+```c++
+void test()
+{
+    string  str1 = "Hello" ;
+    for(int i =0 ;i<str1.size() ;i++)         //[]方式
+    {
+        cout << str1[i] << " " ;
+    }
+    cout << endl ;
+
+    for(int i =0 ;i < str1.size() ;i++)       //at方式
+    {
+        cout << str1.at(i) << " " ;
+    }
+    cout << endl ;
+
+    str1[0] = 'W' ;
+    str1.at(1) = 'W' ;
+    cout << "str1 = " << str1 << endl ;
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### string插入和删除
+
+```c++
+string &insert(int pos,const string& str)
+string &insert(int pos,const char* s)
+string &erase(int pos,int n)
+    
+void test()
+{
+    string str = "Hello" ;
+    str.insert(1,"aaa");
+    cout << "str = " << str << endl ;
+    str.erase(1,3);
+    cout << "str = " << str << endl ;
+}
+
+```
+
+
+
+
+
+
+
+
+
+#### string子串
+
+```c++
+void test()
+{
+    string str = "Hello" ;
+    string s = str.substr(2,2) ;   //string substr(int pos,int n)从pos位置开始,截取n个字符
+    cout << "str = " << str << endl ;
+    cout << "s = " << s << endl ;
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### vector容器
+
+#### 基本概念
+
+vector与数组非常类似，是单端数组
+
+与数组的区别：
+**数组时静态内存，而vector是动态可扩展的**
+
+**可扩展的意思是寻找一块更大的内存，然后将原来的数据拷贝到该内存空间下，将原来的空间释放掉**
+
+```c++
+void printVector(vector<int>&v)
+{
+    for(vector<int>::iterator it =v.begin();it != v.end();it++)
+    {
+        cout << (*it) << " ";
+    }
+    cout << endl ;
+}
+
+void test()
+{
+    vector<int>v1 ;                 //默认构造函数，无参
+    for(int i =0 ;i < 5;i++)
+    {
+        v1.push_back(i);
+    } 
+    printVector(v1);
+
+    vector<int>v2(v1);
+    printVector(v2);             //拷贝构造函数
+
+    vector<int>v3(v1.begin(),v1.end());    //区间法
+    printVector(v3);
+
+    vector<int>v4(5,10);
+    printVector(v4);                    //n个elem
+}
+```
+
+
+
+
+
+
+
+
+
+#### vector赋值
+
+```   c++
+vector<int>v1;
+vector<int>v2;
+v2 = v1 ;               //赋值
+v2.assign(begin,end)    //区间
+v2.assign(n,elem)       //n 个elem
+```
+
+
+
+
+
+
+
+
+
+#### vector的容量和大小
+
+```c++
+void test()
+{
+    vector<int>v;
+    for(int i = 0;i<7;i++)
+    {
+        v.push_back(i);
+    }
+    printVector(v);
+
+    bool b = v.empty() ;                  //为空则返回ture,不为空则返回false
+    cout << "bool b : " << b << endl ;
+
+    cout << "v.capacity : " << v.capacity() << endl ;    //容量
+    cout << "v.size : " << v.size() << endl ;           //大小
+
+    v.resize(9) ;   //重新指定大小，扩展后的用数字0填充
+    printVector(v);
+    cout << "v.capacity : " << v.capacity() << endl ;    //容量
+
+    v.resize(12,66);  ////重新指定大小，扩展后的用指定数字填充
+    printVector(v);
+
+}
+
+```
+
+
+
+
+
+
+
+
+
+#### vector的插入和删除
+
+
+
+```c++
+/*
+push_back()                                       //尾插
+pop_back()                                        //尾删
+insert(const_iterator pos,elem)                  //在迭代器指定位置上插入元素，默认为0
+insert(const_iterator pos,int n,elem)            //在迭代器指定位置上插入n个elem元素
+erase(const_iterator pos)                        //删除迭代器指定位置的元素
+erase(const_iterator start,const_iterator end)   //删除start到end区间内的元素
+clear()                                          //删除所有元素
+*/
+void test()
+{
+    vector<int>v ;
+    for(int i=0 ;i < 6 ;i++)
+    {
+        v.push_back(i) ;
+    }
+    printVector(v);
+
+    v.insert((v.begin()+1),66);    //在指定位置上插入，指定位置使用迭代器
+    printVector(v);
+
+    v.insert(v.begin(),2,100);     //在指定位置上插入n个elem
+    printVector(v);
+
+    v.erase(v.begin());            //指定位置删除某个数，位置使用迭代器指定
+    printVector(v);
+
+    v.erase((v.begin()+2),(v.end()-2)); //删除从[n1,n2]区间内的元素
+    printVector(v);
+
+    v.pop_back();                     //删除尾部最后一个元素
+    v.clear();                        //删除所有元素
+    printVector(v);
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### vector数据的存取
+
+```c++
+void test()
+{
+    vector<int>v ;
+    for(int i =0 ;i < 6 ; i++)
+    {
+        v.push_back(i);
+    }
+
+    for(int i=0 ;i<v.size();i++)
+    {
+        cout << v[i] << " " ;        //通过[]方式访问
+    }
+    cout << endl ;
+
+    cout <<v.at(2) << endl ;        //通过at方式访问
+
+    cout << v.front() << endl ;     //front()返回第一个元素
+    cout << v.back() << endl ;      //back()返回最后一个元素
+}
+```
+
+
+
+
+
+#### vector互换容器
+
+swap();
+
+
+
+#### vector预留空间
+
+reserve(int len)预留空间，预留空间中的元素不可访问
