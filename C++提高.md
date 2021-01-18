@@ -1111,3 +1111,340 @@ swap();
 #### vector预留空间
 
 reserve(int len)预留空间，预留空间中的元素不可访问
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### deque容器
+
+#### 基本概念
+
+- 双端数组，可以对头端进行插入和删除操作
+
+deque与vector的区别：
+
+- vector对于头部的插入效率低，数据量越大，效率越低
+- deque相对而言，对头部的插入和删除速度比vector快
+- deque访问元素时的速度会比vector慢
+
+
+
+
+
+
+
+#### deque构造函数
+
+deque<T>           
+
+deque(int n,elem)  n个elem
+
+deque(begin,end)区间
+
+deque(deque &)拷贝构造函数
+
+
+
+
+
+
+
+
+
+
+
+#### deque赋值
+
+- operator+(deque &)
+- assign(begin,end)
+- assign(int n,elem)
+
+
+
+
+
+
+
+#### deque的容量和大小
+
+和vector一样
+
+deque.empty()判断是否为空
+
+deque.size()容器的大小
+
+deque.resize(n)重新指定大小，指定空间大于原来的空间则默认用0填充，小于原来的空间则依次删除尾部
+
+deque.resize(n,elem)指定元素填充
+
+
+
+
+
+
+
+#### deque的插入和删除
+
+两端操作：
+
+- push_back(elem)尾插
+- push_front(elem)头插
+- pop_back()尾删
+- pop_front()头删
+
+指定位置：
+
+insert(pos,elem)利用迭代器指定位置pos，然后在该位置插入数据elem，返回新数据的位置
+
+insert(pos,n,elem)在pos位置插入n个elem数据，无返回
+
+insert(pos,begin,end)在pos位置上插入区间[begin,end)，无返回
+
+clear()清除所有元素
+
+erase(begin,end)删除[begin,end)区间的数据，返回下一个元素的位置
+
+erase(pos)删除指定位置上的元素，返回下一个元素的位置
+
+
+
+
+
+#### deque的数据存取
+
+- front()取头部元素
+- back()去尾部数据
+- deque.at()
+- operator[]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### stack容器
+
+
+
+#### 常用接口
+
+构造函数
+
+- stack<T>stk;
+- stack(const stack & stk)   拷贝构造函数
+
+赋值操作
+
+- stack& operator = (const stack& stk)   重载等号赋值操作
+
+数据存取
+
+- stack.push()
+- stack.pop()
+- stack.top()返回栈顶元素
+
+大小操作
+
+- stack.empty()
+- stack.size()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### queue容器
+
+#### 常用接口
+
+构造函数
+
+- queue<T>que;
+- queue(const queue & stk)   拷贝构造函数
+
+赋值操作
+
+- queue& operator = (const queue& que)   重载等号赋值操作
+
+数据存取
+
+- queuepush()
+- queue.pop()
+- queue.front()   对头元素
+- queue.back()  队尾元素
+
+大小操作
+
+- queue.empty()
+- queue.size()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### list容器
+
+#### 基本概念
+
+STL中list是一个双端循环链表
+
+由于链表的储存空间并不是连续的内存空间，因此链表list中的迭代器只支持前移和后移
+
+list的优点：
+
+- 采用动态内存分配，不会造成资源的浪费与溢出
+- 链表执行插入和删除操作十分方便，修改指针即可，不需要移动大量元素
+
+listd的缺点：
+
+- 链表灵活，但是空间（指针域）和时间（遍历）需要耗费较大
+
+list的一个重大性质就是，插入操作和删除操作都不会造成原有list容器的失效
+
+
+
+
+
+
+
+
+
+#### list构造函数
+
+- list<T>L;
+- list(const list &)
+- llist(n,elem)
+- list(begin,end)
+
+
+
+
+
+
+
+#### list赋值和交换
+
+- list &operator=(const list &L) 重载=赋值
+- assign(begin,end)  区间
+- assign(n,elem)
+- swap(const list & L)
+
+
+
+
+
+#### list容器的大小操作
+
+- empty()判断是否为空
+
+- size()容器的大小
+
+- resize(n)重新指定大小，指定空间大于原来的空间则默认用0填充，小于原来的空间则依次删除尾部
+
+- resize(n,elem)指定元素填充
+
+
+
+
+
+
+
+
+
+
+#### list容器的插入和删除
+
+- push_front(n)
+- pop_front()
+- push_back(n)
+- pop_back()
+- insert(pos,elem)  insert(pos,n,elem)
+- insert(pos,begin,end)
+- clear()
+- erase(pos,begin,end)
+- erase(pos)
+- remove(elem)移除所有与elem相同的元素
+
+
+
+
+
+
+
+#### list数据的存取
+
+- front() 返回头部元素
+- back() 返回尾部元素
+
+
+
+
+
+
+
+
+
+#### list的反转和排序
+
+- reverse()  反转链表
+- sort()  链表的排序
+
+
+
