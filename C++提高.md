@@ -578,6 +578,90 @@ int main()
 
 
 
+#### 案例
+
+```c++
+/*
+10个部门ABCDEFGHJI
+信息：姓名，工资，部门编号：美术，策划，研发
+随机个10个员工分配部门与工资
+通过multimap进行信息的插入key(部门编号)，value（基本信息）
+分部门显示员工信息
+*/
+#include<iostream>
+#include<string>
+using namespace std ;
+#include<vector>
+#include<map>
+
+class worker
+{
+    public:
+        string m_name ;
+        int m_salary ;
+};
+
+void creatWorker(vector<worker>&v)
+{
+    string n ="ABCDEFGHJI";
+    for(int i=0 ;i<10;i++)
+    {
+        worker w ;
+        w.m_name = n[i];
+        w.m_salary = rand()% 100 + 100 ;
+        v.push_back(w); 
+    }
+}
+
+void creatGroup(vector<worker>&v,multimap<int,worker>& m)
+{
+    for(vector<worker>::iterator it = v.begin();it!=v.end();it++)
+    {
+        int departID = rand() %3 ;
+        m.insert(pair<int,worker>(departID,*it));
+    }
+}
+
+void show_Info(const multimap<int,worker>m)
+{
+    cout << "美术部门 ：" << endl ;
+    multimap<int,worker> :: const_iterator pos = m.find(0) ;
+    int departNmu = m.count(0);
+    int index = 0 ;
+    for(;pos != m.end() && index < departNmu ;pos ++,index ++)
+    {
+        cout << "姓名 ：" << pos->second.m_name << " " << "工资 ：" << pos->second.m_salary << endl ;
+    }
+    cout << "策划部门 ：" << endl ;
+    pos = m.find(1) ;
+    departNmu = m.count(1);
+    index = 0 ;
+    for(;pos != m.end() && index < departNmu ;pos ++,index ++)
+    {
+        cout << "姓名 ：" << pos->second.m_name << " " << "工资 ：" << pos->second.m_salary << endl ;
+    }
+    cout << "研发部门 ：" << endl ;
+    pos = m.find(2) ;
+    departNmu = m.count(2);
+    index = 0 ;
+    for(;pos != m.end() && index < departNmu ;pos ++,index ++)
+    {
+        cout << "姓名 ：" << pos->second.m_name << " " << "工资 ：" << pos->second.m_salary << endl ;
+    }
+}
+
+int main()
+{
+    vector<worker>v;
+    creatWorker(v);
+    multimap<int,worker>m;
+    creatGroup(v,m);
+    show_Info(m);
+    system("pause");
+    return 0 ;
+}
+```
+
 
 
 
@@ -1296,6 +1380,8 @@ erase(pos)删除指定位置上的元素，返回下一个元素的位置
 
 ### queue容器
 
+queue是队列，是先进先出的一种，有两个出口
+
 #### 常用接口
 
 构造函数
@@ -1628,3 +1714,573 @@ m.insert(pair<int,int>(2,20));
 
 
 
+
+
+
+
+
+
+
+
+
+
+### 函数对象
+
+
+
+#### 算术仿函数
+
+使用内建函数对象，需要引入头文件#include<functional>
+
+其中negae是一元运算，其它都是二元运算
+
+仿函数原型：
+
+- plus<T>加法仿函数
+- minus<T>减法仿函数
+- multiplies<T>乘法仿函数
+- divides<T>除法仿函数
+- modulus<T>取模仿函数
+- negate<T>取反仿函数
+
+
+
+
+
+#### 关系仿函数
+
+- bool equal_to<T>//等于
+- bool not_equal<T>//不等于
+- bool grater<T>//大于
+- bool grater_equal<T>//大于等于
+- bool less<T>//小于
+- bool less_equal<T> //小于等于
+
+```c++
+sort(begin,end,grater<T>())
+```
+
+
+
+
+
+#### 逻辑仿函数
+
+- bool logical_and<T>//与
+- bool logical_or<T>//或
+- bool logical_not<T>//非
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 常用查找算法
+
+#### for_each遍历
+
+- for_each(iterator begin,iterator end,_func)
+
+
+
+```c++
+void MyPrint(int val)    //自定义函数
+{
+    cout << val << " " ;
+    
+}
+
+class Myprint          //仿函数
+{
+    public:
+        void operator()(int val)
+        {
+            cout << val << " " ;
+        }
+        
+};
+
+void test()
+{
+    vector<int>v;
+    for(int i =0;i<5;i++)
+    {
+        v.push_back(i);
+    }
+    for_each(v.begin(),v.end(),MyPrint);
+    cout << endl ;
+    for_each(v.begin(),v.end(),Myprint());
+}
+
+int main()
+{
+    test();
+    system("pause");
+    return 0 ;
+}
+```
+
+
+
+
+
+
+
+#### transform
+
+功能描述：
+
+- 搬运容器到另一个容器中
+
+transform(iterator begin_1,iterator end,iterator begin_2,_func)
+
+- begin_1 源容器开始迭代器
+- end 源容器结束迭代器
+- begin_2 目标开始迭代器
+
+```c++
+int Transform(int val)
+{
+    return val ;
+}
+
+void test()
+{
+    vector<int>source ;
+    for(int i =0 ;i < 5; i++)
+    {
+        source.push_back(i);
+    }
+    vector<int>Target;
+    Target.resize(source.size());
+    transform(source.begin(),source.end(),Target.begin(),Transform);
+    for(vector<int>::const_iterator it =Target.begin();it!=Target.end();it++)
+    {
+        cout << *it << " " ;
+    }
+    cout << endl ;
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+#### find
+
+功能描述：
+
+- 查找指定元素，找到就返回该元素的迭代器，否则返回结束迭代器end()
+
+函数原型：
+
+- find(iterator begin ,iterator end,value)
+
+```c++
+class person
+{
+    public:
+        string m_name ;
+        int m_age ;
+    person(string name,int age)
+    {
+        this->m_name = name ;
+        this->m_age = age ;
+    }
+
+    bool operator==(const person p)                //让底层知道两个person数据类型该如何对比
+    {
+        if (this->m_age == p.m_age && this->m_name == p.m_name)
+        {
+            return true ;
+        }
+        else
+        {
+            return false ;
+        }
+    }
+};
+
+void test_01()  //内置数据类型的查找
+{
+    vector<int>v;
+    for(int i=0;i<5;i++)
+    {
+        v.push_back(i);
+    }
+    vector<int>::const_iterator it = find(v.begin(),v.end(),3);
+    if(it == v.end())
+    {
+        cout <<"Not Find" << endl ;
+    }
+    else
+    {
+        cout << "Find : " << *it << endl ;
+    }
+}
+
+void test_02()                              //自定义数据类型
+{
+    vector<person>v;
+    person p1("Aliace",10);
+    person p2("Bob",20);
+    person p3("bob",10);
+    v.push_back(p1);
+    v.push_back(p2);
+    vector<person>::const_iterator it = find(v.begin(),v.end(),p3);
+     if(it == v.end())
+    {
+        cout <<"Not Find" << endl ;
+    }
+    else
+    {
+        cout << "Find : " <<"name : " <<it->m_name <<"age: "<< it->m_age << endl ;
+    }
+}
+
+
+```
+
+
+
+
+
+#### find_if
+
+条件查找，用法同find()
+
+
+
+#### adjacent_find
+
+- 查找相邻重复元素
+
+用法：
+
+- adjacent_find(iterator begin,iterator end),若查到，则返回该位置的迭代器
+
+```c++
+void test ()
+{
+    vector<int>v;
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+    v.push_back(3);
+    v.push_back(4);
+    v.push_back(2);
+    vector<int>::const_iterator pos = adjacent_find(v.begin(),v.end());
+    if(pos == v.end())
+    {
+        cout << "Not Find" << endl ;
+    }
+    else
+    {
+        cout << "Find : " << *pos << endl ;
+    }
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+#### binary_search
+
+查找元素是否存在，若存在则返回true，否则返回false
+
+**注意：该用法必须为有序序列**
+
+bool binary_serach(iterator begin,iterator end,value)
+
+
+
+
+
+
+
+
+
+
+
+#### count
+
+统计元素个数
+
+int count(iterator begin,iterator end,value)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 常用排序算法
+
+
+
+#### sort
+
+对容器内数据进行排序
+
+sort(iterator begin,iterator end,_Pred)默认排序为升序
+
+```c++
+void test()
+{
+    vector<int>v;
+    v.push_back(10);
+    v.push_back(50);
+    v.push_back(30);
+    v.push_back(20);
+    v.push_back(30);
+    cout << "排序前 ： " << endl ;
+    Myprint(v);
+    
+    cout << "默认排序 ：" << endl ;
+    sort(v.begin(),v.end());
+    Myprint(v);
+    
+    cout << "排序后 ： " << endl ;
+    sort(v.begin(),v.end(),greater<int>());
+    Myprint(v);
+}
+```
+
+
+
+
+
+
+
+#### random_shuffle
+
+打乱排序算法
+
+random_shuffle(iterator begin,iterator end);
+
+```c++
+void test()
+{
+    vector<int>v;
+    for(int i=0 ;i<5;i++)
+    {
+        v.push_back(i);
+    }
+    cout << "开始 ： " << endl ;
+    Myprint(v);
+    cout << " 打乱排序后 : " << endl ;
+    random_shuffle(v.begin(),v.end());
+    Myprint(v);
+    cout << "重新排序 ： " << endl ;
+    sort(v.begin(),v.end(),greater<int>());
+    Myprint(v);
+}
+```
+
+
+
+
+
+
+
+
+
+#### merge
+
+两个容器的元素合并，并存储到另一个容器中
+
+**注意：两个容器必须为有序的**
+
+merge(begin1,end1,,begin2,end2,begin3)
+
+```c++
+void test()
+{
+    vector<int>v1;
+    vector<int>v2;
+    vector<int>v3;
+    // v3.resize(v1.size()+v2.size());  在这里指定V3大小不对
+    for(int i =0;i<5;i++)
+    {
+        v1.push_back(i);
+        v2.push_back(i);
+    }
+    v3.resize(v1.size()+v2.size());
+    cout << "两容器合并前的元素 ： " << endl ;
+    cout << "v1 : "  ;
+    for_each(v1.begin(),v1.end(),Print);
+    cout << endl ;
+    cout << "v2 : " ;
+    for_each(v2.begin(),v2.end(),Print);
+    cout << endl ;
+    merge(v1.begin(),v1.end(),v2.begin(),v2.end(),v3.begin());
+    for_each(v3.begin(),v3.end(),Print);
+}
+```
+
+
+
+
+
+
+
+
+
+#### reverse
+
+将容器内的元素反转
+
+reverse(begin,end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 常用的拷贝和替换算法
+
+
+
+#### copy
+
+将一个容器的元素赋给另一个容器中
+
+copy(iterator begin,iterator end,iterator dest)
+
+
+
+
+
+
+
+#### replace
+
+将指定区间内的数值替换为指定的数值
+
+replace(begin,end,old_value,new)
+
+
+
+
+
+
+
+#### replace_if
+
+按照条件替换
+
+replace_if(begin,end,_Pred,value)
+
+
+
+#### swap
+
+交换两个容器
+
+swap(c1,c2)将两个要交换的容器传入即可
+
+
+
+
+
+
+
+
+
+### 常用的算术生成算法
+
+包含头文件#include<numeric>
+
+#### accumulate
+
+计算容器内元素的累加和
+
+accumulate(begin,end,value) //value值为起始累加数
+
+#### fill
+
+将指定区间内填充指定的值
+
+fill(begin,end,value)
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 常用集合算法
+
+#### set_intersection
+
+求两个集合的交集
+
+注意：**两个集合中元素必须为有序序列**
+
+set_intersection(begin1,end1,begin2,end2,dest)
+
+会返回求得交集的末尾元素位置
+
+#### set_union
+
+求两个集合的并集
+
+用法同set_intersection
+
+
+
+#### set_difference
+
+求两个集合的差集
+
+用法同上
